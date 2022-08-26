@@ -1,0 +1,1033 @@
+Docker and Orchestration
+
+Masood Ahmed
+9663124747
+masood@rpsconsulting.in
+
+RPS Consulting Pvt Ltd 
+Bangalore
+
+Unix      Linux      Devops    Vir/cloud
+Solaris   redhat     Ansible    kubernetes/openshift
+HPUX      suse       docker
+https://cloud2.rpsconsulting.in/console/#/
+
+1 DR-U01  rps@12345 Abhishek
+2 DR-U02  rps@12345  Adithya
+3 DR-U03  rps@12345  Deepak A.R
+4 DR-U04  rps@12345  Gomathi
+5 DR-U05  rps@12345 iswarya
+6 DR-U06  rps@12345 jyothi
+7 DR-U07  rps@12345 Kumaran
+8 DR-U08  rps@12345 Murali 
+9 DR-U09  rps@12345 Nicholas
+10 DR-U10 rps@12345 Ragesh 
+11 DR-U11 rps@12345 Raj
+12 DR-U12  rps@12345 Rajesh H
+13 DR-U13  rps@12345 Saquib
+14 DR-U14  rps@12345 sathish kumar
+15 DR-U15  rps@12345 shanmugam
+16 DR-U16  rps@12345 srikanth
+17 DR-U17  rps@12345 tirthraj Sing
+18 DR-U18  rps@12345  trimula Aditya
+19 DR-U19  rps@12345  vidasagar
+20 DR-U20  rps@12345 yogesh
+21 DR-U21 rps@12345  Srimanikandan
+22 DR-U22 rps@12345  Varshitha
+23 DR-U23 rps@12345  Rama
+24 DR-U24 rps@12345  
+25 DR-U25 rps@12345  
+26 DR-Tr2 rps@12345  
+
+--------------
+login name : rps
+password : rps
+
+how to check the OS details
+1) uname -a
+2) $ cat /etc/*release*
+3) $ hostnamectl
+4) $ sudo dmidecode | less
+
+
+----------------
+virtualization
+
+hypervisor
+type 1 : hypervisor server  ( vmware Esxi server ) 
+type 2 :  OS ---- hypervisor   ( vmware workstation , oracle Virtual Box , etc etc )
+
+Containers
+OS virtualization
+Solaris --- zones
+hpux  --- npar/vpar
+aix   --- lpar
+linux   --- lxc
+
+Containers and docker
+Kernel Virtualization
+ 
+
+isolation of applications
+I. Virtual machines
+II. Containers
+
+images
+
+images is a read only copy of container and it has the below contents
+a) mini OS  b) Application dependent packages c) applciation binaries
+d) application files e) command to start the appliations
+
+container : 
+its a read and write run time copy of image 
+
+
+run time : platform to run the image
+1) physical machine 2) VM  3) Cloud 
+run time uses the images to run the container ( OS + Application )
+
+its a pice if software need to be installed in our infrastructure to run the container
+
+run time example :
+ 1) docker , podman , containerd, CRIO etc etc
+
+OCI ( open contianer initiative) 
+
+runc  standrads
+image must be compatible on any run time using any infrastructure 
+
+ 
+
+
+
+
+
+1) install the apache web server on linux OS
+a) linux OS
+b) httpd packages to install 
+c) configure the index.html file  
+
+
+-----------------
+Labs
+
+Docker engine installation on Ubuntu 
+------------------------------------
+
+
+$ sudo apt update 
+
+
+$ sudo apt install apt-transport-https ca-certificates curl software-properties-common lsb-release -y
+
+Add docker key:
+
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/docker-archive-keyring.gpg
+
+Add docker repository to your hosts with the following commands:
+
+$ sudo add-apt-repository "deb [arch=amd64]
+ https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+$ sudo apt update
+
+Ensure that you are going to install from the official Docker repo instead of default Ubuntu repo
+
+$ apt-cache policy docker-ce -y
+
+Install Docker CE on Ubuntu22.04|20.04:
+
+$ sudo apt install docker-ce -y 
+
+After installing, Docker daemon should be started. Confirm the status by running the below command:
+
+$ systemctl status docker
+press q to quit
+
+
+Add your user to Docker group to avoid typing sudo everytime you run docker commands.
+
+$ sudo usermod -aG docker ${USER} 
+
+$ newgrp docker   
+
+$ groups   ( to check )
+
+
+$ docker version
+
+---------------------------
+docker commands
+
+$ docker images
+
+run the container
+we need the image
+a) pull the desire image from the image repository ( public, private)
+b) we can can the container directly and it will first pull the image by default and
+ run the container
+ 
+a) pulling the image
+  $ docker pull nginx 
+  
+  
+b) docker run ...........
+-----------------
+
+labs
+
+do the labs from here
+
+1) check the containers are running
+$ docker  container ls 
+or 
+$ docker ps 
+$ docker  container ls -a  ( to see all running and stopped containers )
+or
+$ docker ps -a
+
+creating our first container of ubuntu
+
+-t  ( terminal )
+-i   ( interactive )
+
+2) running the first container
+$ docker search ubuntu
+$ docker run  --name test -it ubuntu
+( you will be in shell prompt of ubuntu )
+# ps
+# cat /etc/*release*
+# exit 
+
+
+$ docker images
+to start the container again 
+$ docker start -i  <container/id>
+# exit
+
+launching the another container from the centos image
+$ docker run --name web-centos  -it  centos:latest
+# exit
+
+
+Docker Images
+
+
+$ docker images
+
+to run the container without stopping it
+1) exit by using the ctrl+p+q   keys  ( dettach )
+    we can attach the container back 
+$  docker attach <container id >
+  # exit
+
+$ docker ps
+$ docker ps -a 
+
+2) we can run the container in detached mode ( run as deamon or detach mode )
+     -d  ( option )
+
+$ docker  image pull  nginx:latest  ( it will just pull , download the image from remote repo into local repo )
+$ docker images 
+$ docker  run --name webserver1  -d  nginx:latest
+
+$ docker ps 
+( it will be running )
+we can enter into the container by executing the shell 
+
+$ docker exec  -it   webserver1   /bin/bash
+
+# exit
+
+$ 
+
+note : 
+    images
+    centos
+    ubuntu
+    rhel8
+    tomee
+    alpine 
+    
+-------------------------------------------------------------
+
+running ubuntu container and access via ssh
+
+$ docker run --name myubuntu -it -d ubuntu 
+
+$ docker exec -it myubuntu bash
+# apt update
+#  apt install net-tools -y
+# ifconfig 
+# apt install ssh -y 
+#  echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+# service ssh start
+# passwd root
+
+# exit
+
+now check the ip address of the container
+$ docker inspect <name/id> | grep -i ip
+
+$ ssh root@<ip>
+
+----------------------------------------------------------------
+Day 2
+
+
+labs 
+
+check the container logs 
+$ docker logs webserver1
+
+or
+
+$ docker  logs containerid
+
+$ docker  ps 
+
+to stop and start  the container
+$ docker  stop containername/id
+$ docker  start containername/id
+
+to delete the container
+
+first, stop the container and then delete it
+
+$ docker  stop containername/id 
+$ docker  rm containername/id
+
+ to check the container resource usage
+
+$ docker stats
+
+17) To delete all the stopped containers at one go
+
+$ docker container prune
+
+18) Delete all the containers
+
+$ docker container ls -aq|xargs docker container stop
+$ docker container ls -aq|xargs docker container rm -f  
+
+$ docker ps 
+$ docker ps -a
+
+----------------------------
+how to configure the application with in the container and access out side the 
+container
+
+1) run the ubuntu OS 
+2) configure the apache web server
+
+labs
+$ docker run --name web1 -itd ubuntu
+$ docker ps
+$  docker exec -it 6cab4c460271 bash
+
+( with in the container install the apache web server and configure the 
+web page )
+# apt update
+# apt install apache2 curl -y
+# cd /var/www/html
+# echo "Welcome to Fidelity Web server" > index.html
+
+or
+
+# cat > index.html
+"Welcome to Fidelity Web server"
+^d  ( to save and exit )
+
+# service apache2 start
+
+# curl http://localhost
+
+# exit
+
+check the ip address of container 
+docker inspect <name/containerid> | grep -i ip
+
+$ curl http://<ipaddress of container>
+if curl does not work
+$ sudo apt install curl -y
+$ curl http://<ipaddress of container>
+
+------------------------------
+how to expose the port number of container to access from outside  network 
+
+-P  ( allocate the dynamic port number to container )
+  range of 32786  to 65535
+  
+-p   (  allocated the static port to container )
+ <containerport:hostport>
+ 
+
+labs 
+$ docker run --name nginx-web -d -P nginx
+
+$ docker ps
+( will show the port number )
+$ curl http://0.0.0.0:<port number>
+
+try from outside network
+windows --- open the browser 
+http://<hostip:port>
+
+static port
+
+$ docker run --name web2 -d -p 8085:80 nginx
+
+note : 8085 ( host port)   80(container port)
+$ docker ps
+$ curl http://0.0.0.0:8085
+
+test from windows browser 
+http://<hostip:8085>
+
+----------------------
+docker networking
+
+Labs
+
+$ docker network ls
+
+$ docker network inspect bridge | less
+
+$ docker run --name web3 --network=host -itd   -P nginx
+
+$ docker ps 
+( port number will not be exposed because of host network)
+
+note : host will not get the ip address also , it uses the host ip when login and check
+
+$ docker exec -it web3 bash
+# apt update
+# apt install net-tools -y
+# ifconfig 
+
+
+how to create our own network 
+
+$ docker network create --driver=bridge --subnet=192.168.10.0/24 mynet
+
+$ docker network ls
+
+$  docker run --name web3  -itd --network=mynet -P nginx
+
+$ docker run --name web4  -itd --network=mynet -P --ip 192.168.10.50 nginx
+( creating container with specific ip from the select netwok range )
+
+$  docker run --name web5  -itd --network=mynet -P --ip 192.169.10.5 nginx
+( it will fail to assing the ip address )
+
+to create the network with the ip range
+$ docker network create --driver=bridge --ip-range=10.10.20.50/8 --subnet=10.10.0.0/8 net0
+
+delete all the containers
+
+$ docker container ls -aq|xargs docker container rm -f
+
+delete all the created networks
+$ docker network rm <networkid> <networkid>
+
+----------------------------------------------
+creating our own container image
+
+two methods
+I. creating interactive using the running container 
+II. create using the Dockerfile
+     ( image from the scratch)
+
+I. how to create the new image from existing container
+   we will get the same base OS in the new image
+   
+labs:
+1) run the container using the ubuntu image
+2) install the packages 
+   apache2 , git , curl , vim 
+3) create the new index.html file
+4) start the httpd service
+5) detach the container and check the web page
+6) stop the container 
+7) commit the image from the container id
+
+ Labs 
+ remove all the existing containers
+ $ docker container ls -aq|xargs docker container rm -f
+ 
+ $ docker run --name web1  -it ubuntu
+ # apt update
+ # apt install apache2  git curl  vim -y
+ # cd /var/www/html
+ # ls -l
+ # > index.html
+ # vim index.html
+  Welcome to .............. !!!!!
+  :wq
+  #  apachectl -D forground
+  # service apache2 status
+  # curl http://localhost
+  
+  detatch the container 
+  ctl +pq
+  
+  check the ip address of container 
+  $ docker inspect <container id> | grep -i ipaddr
+  $ curl http://<ipaddress>
+  
+  stop the container to commit 
+  $ docker stop <containerid>
+  $ docker ps -a
+  $ docker commit --change='CMD ["apachectl", "-DFOREGROUND"]' -c "EXPOSE 80" <containerid>  web:v1
+ 
+ $  docker images
+ 
+inspect the image
+$ docker inspect web:v1 | less
+$ docker run --name web1  -itd -P web:v1
+$ docker ps
+$ curl http://0.0.0.0:<portnumber>
+
+--------------------------------------
+note : 
+1)redhat based Linux 
+a) centos b) fedora c) rhel
+yum command for packages
+
+2) Suse Linux
+zypper command for packages
+
+3) debian based linux
+   a) ubuntu  b) debain 
+apt command for packages
+
+
+
+II. create using the Dockerfile
+     ( image from the scratch)
+
+labs 
+$ sudo apt install vim -y
+
+$ mkdir images
+$ cd images
+
+$ vim  Dockerfile
+FROM ubuntu
+RUN apt update && \
+        apt  install curl git apache2  -y
+WORKDIR /var/www/html
+COPY index.html   .
+CMD ["apachectl", "-DFOREGROUND"]
+EXPOSE 80
+:wq!
+
+
+note : we can create the file insted of copying 
+    RUN echo "Welcome to my docker image" > /var/www/html/index.html
+
+$ cat > index.html
+Welcome to my new Docker image !!!!!
+^d ( to save and exit)
+
+build the image from the Dockerfile
+$ docker build . -t web:apachev1
+
+$ docker images
+
+update the docker file and build the new image
+$ vim Dockerfile
+RUN mkdir oracle
+:wq!
+
+$ docker build . -t web:apachev2
+
+how to push the images in dockerhub 
+( login id of docker hub 
+1) backup of images
+2) distribution 
+
+$ docker push myweb:apache2
+( we get the errors )
+
+1. login into docker hub 
+$  docker login   
+or 
+$ sudo docker login 
+
+2. tag the image
+$ docker image tag myweb:apache2 masoodms/myweb:apache2
+$ docker images
+
+$ docker image tag myweb:apache2 xyz/myweb:apache2
+$ docker images 
+
+4. untagged the images
+$ docker image rm xyz/myweb:apache2
+
+once done login into docker hub to confirm
+
+5. delete the image
+$ docker image rm myweb:apache2
+
+6. search the images with docker id
+$  docker search masoodms
+$ docker run --name abc123 -itd -P masoodms/myweb:apache2
+-------------------------------------------------------------
+Day 3
+topics to cover
+1) how to push images to github 
+2) how to add storage to container
+3) Docker Composer
+4) Docker Swarm
+5) clubbing both docker-composer + Docker Swarm
+
+------------------------------------------------
+1) how to push images to github 
+how to push and pull the images from the git hub
+
+login into github and create the token as the password
+
+labs
+
+1) should have an account in GitHub
+2) login to the account and create the token 
+   Account---setting----Developer settings----Personal access Token---Generate new token
+   ( give some name to the token and select the options below and generate and copy the token)
+
+
+3) login into the github via docker login command
+   $ sudo docker login ghcr.io  --username  <github-account>
+     (paste the tocken here)
+
+4) Tag and push your Docker image
+   $ docker  image tag <imagename> ghcr.io/github-account/image-name:image-version
+
+example
+$  docker  image tag myweb:apache1  ghcr.io/masoodmls/fidelity-web:v1
+
+$ docker image
+
+5) push the image
+syntax
+$ docker push ghcr.io/<github-account>/<image name>
+
+$ docker push ghcr.io/masoodmls/fidelity-web:v2
+
+goto git hub and check ( under the packages , if need then we can create 
+new repository and move the image )
+
+$ docker pull ghcr.io/masoodmls/fidelity-web:v2
+
+
+------------------------------------------------------------
+
+Storage in containers
+local the local f/s from the host OS and they are ephemeral ( temporary )
+
+configure the permanent storage in a container 
+volumes  ( allocation the dir from the hosts f/s to container f/s )
+-v 
+
+different options for allocating the space to the cotnainer
+1) directory  ( normal directory )
+2) remote directory ( NFS )
+3) local mounted dir
+    a) part   --- mount
+    b) lvm 
+    c) startis   volumes
+    d) vdo   volumes
+    c) ZFS  
+
+syntax
+
+docker run  -v  <hostdir>:<container dir>  rhmap47/mysql
+
+example 
+$ mkdir ~/mydata
+ $ docker run --name rps -v ~/mydata:/oracle123  -d -P  <image>
+
+ $ docker ps
+ $ docker exec -it rps /bin/bash
+ $ cd /oracle123
+ $ touch f1 f2 f3
+ $ exit
+ $ cd ~/mydata
+ $ ls -l 
+    ( can see the data )
+
+Note: if selinux is in enforcing mode ( Active )
+$ docker run --name rps -v ~/mydata:/oracle123:Z  -d -P  <image>
+-------------------------------------
+to run and remove the container 
+$ docker run --name rps123 --rm -it  nginx cat /etc/*release*
+
+$ docker run --name rps123 --rm -it  nginx bash
+# exit
+( the container will get delete automatically )
+
+Docker composer
+
+docker compose
+
+Difference between docker-compose and docker run
+The key difference between docker run versus docker-compose is that docker run is entirely command line based,
+ while docker-compose reads configuration data from a YAML file. 
+
+The second major difference is that docker run can only start one container at a time, while docker-compose will configure and run multiple container.
+
+Imagine you wanted to use an Nginx container to test your website on your desktop computer. There are two available approaches:
+
+Start the Nginx container on the command line with docker run
+Start the Nginx with the docker-compose up and a preconfigured YAML file
+
+
+$ docker run -d  --name=my-website --cpus=1.5 --memory=2048m -p 8088:80 -v $PWD/website:/usr/share/nginx/html/ nginx
+
+
+note : For instance, if the host machine has two CPUs and you set --cpus="1.5", the container is guaranteed at most one and a half of the CPUs
+
+$ docker ps
+$ docker stats
+
+Labs
+
+docker compose installation
+
+$ mkdir -p ~/.docker/cli-plugins
+$ curl -SL https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+
+$ chmod +x ~/.docker/cli-plugins/docker-compose
+$ sudo cp ~/.docker/cli-plugins/docker-compose  /usr/local/bin
+
+with out docker-compose
+$ docker run -d  --name=my-website --cpus=1.5 --memory=2048m -p 80:80 -v $PWD/website:/usr/share/nginx/html/ nginx:latest
+
+$ docker state
+
+$ docker exec -it my-website bash
+# apt update
+#  apt install procps -y
+# top
+# cd /usr/share/nginx/html
+# touch f1 f2 f3
+# exit
+$ ls -l website
+
+
+The docker-compose command codes all runtime configuration data in an apply named YAML file called docker-compose.yaml
+
+$ cat > docker-compose.yaml
+version: '3.9'
+services:
+  nginx-service:
+    container_name: web-compose
+    image: nginx:latest
+    cpus: 1.5
+    mem_limit: 2048m
+    ports:
+      - "8080:80"
+    volumes:
+      - $PWD/website1:/usr/share/nginx/html
+
+^d  ( to save and exit )
+
+$ docker-compose up -d 
+
+$ docker ps
+
+
+multi container Example
+
+$ mkdir multi-container
+$ cd multi-container
+
+$ cat > docker-compose.yaml
+version: '3.9'
+services:
+  nginx-service:
+    container_name: my-website-01
+    image: nginx:latest
+    cpus: 1.5
+    mem_limit: 2048m
+    ports:
+      - "801:80"
+    volumes:
+      - $PWD/website:/usr/share/nginx/html
+  apache-service:
+    container_name: my-website-02
+    image: httpd:latest
+    cpus: 1.5
+    mem_limit: 2048m
+    ports:
+      - "88:80"
+  tomcat-service:
+    container_name: my-java-app-1
+    image: tomcat:latest
+    cpus: 2.5
+    mem_limit: 4096m
+    ports:
+      - "8099:80"
+
+^d ( to save )
+
+$ docker-compose up -d
+$ docker ps
+
+$ docker-compose  ls
+
+$ docker-compose down
+$ docker-compose up -d
+
+$ docker-compose  ps
+
+$ docker-compose  exec -it tomcat-service bash
+# exit
+
+$  docker-compose  pause tomcat-service
+$ docker-compose ps
+$ docker-compose  unpause tomcat-service
+
+-----------------------------------------------
+
+
+-------------------------------------
+Docker Swarm introduction
+
+containers challenges
+1) user has to login to each hosts for creating the containers
+2) user has to login to  hosts where container are running to  check the status of containers running and execute command 
+3) if any hosts goes down all containers in the host will get effected ( because very host are stand alone and does not share in info other hosts , it does have H/A
+4) container to container across the hosts there is no connectivity, no multi container networking
+5) No centralized administration of container managment
+
+Solution : we need containers orchestration service to manage containers life cycle
+the orchestration service will interact with runtime to manage it
+
+containers Orchestration platform
+1) docker swarm -- by docker
+2) Mesos  --- most scalable Orchestration 50,000 nodes
+3) Kubernetes --- win race , its born from google and licenced from CNCF 
+    CNCF -- Cloude Native Foundation Computing 
+kubernetes is most adaptive open source product after linux 
+
+now docker also started supporting kubernetes, now k8s has become default Orchestration platform for containers
+
+-----------------
+1) docker swarm -- by docker
+
+What is a Swarm?
+Docker Swarm is a cluster management and orchestration tool that makes it easy to scale and manage your already existing docker services. A swarm consists of multiple Docker hosts that run in the so-called swarm mode and act eighter as managers (managing member relationships) or as workers (run the services). A given Docker host can be a manager, worker or can perform both roles.
+
+
+
+Managers Nodes:
+Manager nodes distribute and schedule incoming tasks onto the Worker nodes, maintain the cluster state and perform orchestration and cluster management functions. Manager Nodes can also optionally run services for Worker nodes.
+
+Cluster management tasks include:
+
+1) Maintaining the cluster state
+2) Scheduling services
+3) Serving swarm mode to HTTP API endpoints
+
+
+Services
+A service is the definition of the tasks to execute on the nodes. It is the primary root of user interaction with the swarm.
+
+When you create a service, you specify which container image to use and which commands to execute inside running containers. You also define other options for the service including:
+
+the port you want to expose
+CPU and memory limitations
+the number of replicas of the image to run in the swarm
+a rolling update policy
+
+---------------
+Labs
+
+Docker Swarm Setup
+1. configure the hostname and setup /etc/hosts
+
+a) login into node1
+$ sudo nmtui
+(manager)
+
+$ sudo vim /etc/hosts
+192.168.58.134 manager
+192.168.58.135 worker1
+192.168.58.136 worker2
+
+:wq!
+
+$ sudo init 6
+
+2) login into node2
+$ sudo nmtui
+( worker1)
+
+$ sudo init 6
+
+3) login node3
+$ sudo nmtui
+( worker2)
+
+$ sudo init 6
+
+putty and connect to worker1
+putty and connect to worker2
+
+4) install the docker engine on worker1 and worker2
+
+5. run the below script on worker1 and worker2 to configure and install docker engine
+
+$ cat > docker-install.sh
+
+echo "Starting the Docker Installation"
+
+sudo apt update 
+
+
+sudo apt install apt-transport-https ca-certificates curl software-properties-common lsb-release
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/docker-archive-keyring.gpg
+
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y
+
+
+sudo apt update
+sudo apt install docker-ce -y
+
+
+sudo usermod -aG docker ${USER}
+
+newgrp docker
+
+echo "Docker installation is done"
+
+^d ( to save and exit)
+
+$ chmod +x docker-install.sh
+$ ./docker-install.sh
+
+now setup and initialize the docker swarm 
+
+6. login into manager node to install docker swarm
+Create Docker Swarm Cluster onUbuntu 22.04|20.04
+To set up swarm cluster, we first need to initialize Docker Swarm mode on the manager node then add the worker nodes to the cluster.
+
+Get interface name and ip address
+$ ip a
+
+$ INT_NAME="ens33" #replace accordingly 
+$ HOST_IP=$(ip addr show $INT_NAME | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+
+Confirm IP address is saved correctly:
+
+$ echo $HOST_IP
+
+Run the below command to initialize Docker swarm node on the manager.
+
+$ sudo docker swarm init --advertise-addr $HOST_IP
+
+( copy the join output and run on other worker nodes 
+note : first install docker packages on both the worker nodes )
+
+login into worker1
+$ ( paste the command)
+
+login into worker2
+$ ( paste the command)
+
+login into manager 
+$   docker node ls  ( to check )
+
+
+configure the container through swarm
+
+EXAMPLE
+
+labs
+
+delete all the running containers
+
+$ docker container ls -aq|xargs docker container rm -f
+
+$ docker ps -a
+
+
+$ docker service create --name web-server -p 8080:80 nginx
+
+$ docker service ls
+
+$ docker service scale web-server=3
+
+$  docker service ls
+
+$  docker service  ps web-server
+
+delete the service
+
+$ docker service rm web-server
+$ docker service ls
+$ docker ps ( check in all the nodes , it won't be avalible)
+
+$ docker service  create --name=web1 --limit-cpu 0.1 --limit-memory 1G nginx:latest
+
+$ docker service ls
+
+$ docker service scale web1=5
+
+$ docker service ps web1
+
+$ docker service inspect --pretty web1 | less
+
+$ docker service scale web1=3
+
+$ docker service ps web1
+
+
+creating the Stack using docker compose
+
+$ cat > mystack.yaml
+
+version: "3.7"
+services:
+  nginx:
+    image: nginx:latest
+    ports: ["8084:80"]
+    deploy:
+      replicas: 6
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 1G
+
+^d ( to save and exit )
+
+$ docker stack deploy -c mystack.yaml nginxtest
+
+$ docker service ls
+$ docker ps
+$ docker service  ps nginxtest_nginx
+
+list the stacks
+
+$ docker stack ls
+
+# List the services of a specific stack
+$  docker stack ps nginxtest
+
+remove the stack
+$ docker stack rm nginxtest
+
+$ docker stack ps nginxtest
+
+$ docker ps
+
+
+
+
